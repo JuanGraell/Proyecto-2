@@ -3,21 +3,6 @@ import pygame,sys
 from classQueue import Queue
 from button import Button
 
-'''
-def patataCaliente(listaNombres):
-    colaSimulacion = Queue()
-    for nombre in listaNombres:
-        colaSimulacion.enqueue(nombre)
-    
-    while colaSimulacion.size() > 1:
-        for i in range (random.randint(1,len(jugadores))):
-            colaSimulacion.enqueue(colaSimulacion.dequeue())
-
-        print(colaSimulacion.dequeue(), "se eliminó")
-        
-    return colaSimulacion.dequeue()
-'''
-
 pygame.init()
 
 height=1280
