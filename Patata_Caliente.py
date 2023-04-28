@@ -80,6 +80,13 @@ def jugar():
 
         pygame.display.update()
 
+
+def pausar():
+    pass
+
+def continuar():
+    pass
+
 def juego(nombres_jugadores):
     num_jugadores = len(nombres_jugadores)
     pygame.init()
@@ -93,7 +100,7 @@ def juego(nombres_jugadores):
     mixer.music.load("Sounds/cancion.mp3")
     
     # Setting the volume
-    mixer.music.set_volume(0.7)
+    mixer.music.set_volume(0.2)
     
     # Start playing the song
     mixer.music.play()
@@ -109,7 +116,16 @@ def juego(nombres_jugadores):
 
          # Dibujar los círculos de los jugadores
         radio = 50
-        separacion = 170
+        if (num_jugadores==2):
+            separacion=800
+        elif(num_jugadores==3):
+            separacion=450
+        elif(num_jugadores==4):
+            separacion=300
+        elif(num_jugadores==5):
+            separacion=225
+        elif(num_jugadores==6):
+            separacion = 170
         x_ini = 200
         y = 300
         for i in range(num_jugadores):
@@ -129,6 +145,11 @@ def juego(nombres_jugadores):
         salir_button.changeColor(MOUSE_POS)
         salir_button.update(ventana)
 
+        pausa_button = Button(image=None, pos=(1000, 600), text_input="PAUSAR", font=get_font(40), base_color="white", hovering_color="green")
+
+        pausa_button.changeColor(MOUSE_POS)
+        pausa_button.update(ventana)
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -138,6 +159,9 @@ def juego(nombres_jugadores):
                     #mixer.music.stop()
                     pygame.quit()
                     sys.exit()
+
+                if pausa_button.checkForInput(MOUSE_POS):
+                    mixer.music.pause()
 
         pygame.display.update()
 
