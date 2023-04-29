@@ -4,6 +4,7 @@ from classQueue import Queue
 from button import Button
 import sys
 import math
+#from tkinter import *
 from tkinter import messagebox
 import tkinter as tk
 from tkinter.font import Font
@@ -60,6 +61,7 @@ def get_font(size):
     return pygame.font.Font("assets/font.ttf", size)
 
 def jugar():
+
     num_jugadores = 2 # número inicial de jugadores
     while True:
         MOUSE_POS = pygame.mouse.get_pos()
@@ -138,6 +140,7 @@ def jugar():
 
 
 def juego(nombres_jugadores):
+    jugadores_eliminados=[]
     num_jugadores = len(nombres_jugadores)
 
     if (num_jugadores==2):
@@ -222,7 +225,7 @@ def juego(nombres_jugadores):
         delta=present-past
         past=present
         accumulated+=delta
-        if(accumulated>=1500):
+        if(accumulated>=1500 and estado):
             accumulated=0
             if(jug>=num_jugadores):
                 jug=0
@@ -275,37 +278,26 @@ def juego(nombres_jugadores):
                         j=0
                         for i in jugadores:
                             if (i.getBola()):
-                                pygame.time.wait(500)
                                 mixer.music.load("Sounds/Gun_sound.mpeg")
+                                #pygame.time.wait(1000)
+                                
                                 mixer.music.set_volume(0.2)
                                 mixer.music.play()
                                 jugador_eliminado=i.getNombre()
+                                jugadores_eliminados.append(jugador_eliminado)
+                                nombres_jugadores.pop(j)
                                 jugadores.pop(j)
+                                num_jugadores-=1
+                                #Tk().wm_withdraw() #to hide the main window
+                                messagebox.showinfo('Jugador Eliminado','El jugador '+jugador_eliminado+' ha sido ejecutado')
                             j+=1
-                        height=1280
-                        widht=720
-
-                        ventana_temp = pygame.display.set_mode((height,widht))
-                        ventana_temp.blit(BG, (0, 0))
-
-                        MOUSE_POS = pygame.mouse.get_pos()
-
-                        TEXT = get_font(80).render("El Jugador eliminado fue:", True, "#b68f40")
-                        RECT = TEXT.get_rect(center=(640, 100))
-                        TEXT = get_font(80).render(jugador_eliminado, True, "#b68f40")
-                        RECT = TEXT.get_rect(center=(640, 100))
-                        entendido = Button(image=None, pos=(640, 460), text_input="entendido", font=get_font(75), base_color="Black", hovering_color="Green")
-
-                        entendido.changeColor(MOUSE_POS)
-                        entendido.update(ventana_temp)
-                        ventana_temp.blit(TEXT, RECT)
-                        for event in pygame.event.get():
-                            if event.type == pygame.MOUSEBUTTONDOWN:
-                                if entendido.checkForInput(MOUSE_POS):
-                                    juego()
-
+                        #juego(nombres_jugadores) #para volver a crear a los jugadores
 
                     else:
+                        past=0
+                        present=0
+                        delta=0
+                        accumulated=0
                         estado=True
                         pausa_button = Button(image=None, pos=(1000, 600), text_input="PAUSAR", font=get_font(40), base_color="white", hovering_color="green")
                         ventana.fill((0,0,0))
