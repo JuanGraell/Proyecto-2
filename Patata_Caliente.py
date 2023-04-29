@@ -140,6 +140,10 @@ def jugar():
 
 
 def victoria(jugador):
+    mixer.init()
+    mixer.music.load("Sounds/victory.mpeg")
+    mixer.music.set_volume(0.2)
+    mixer.music.play()
     pygame.init()
     ventana = pygame.display.set_mode((1280, 720))
     pygame.display.set_caption("Juego terminado")
@@ -160,7 +164,7 @@ def victoria(jugador):
         
         MOUSE_POS = pygame.mouse.get_pos() 
         
-        salir_button = Button(image=None, pos=(400, 600), text_input="SALIR", font=get_font(40), base_color="white", hovering_color="red")
+        salir_button = Button(image=None, pos=(640, 600), text_input="SALIR", font=get_font(40), base_color="white", hovering_color="red")
 
         salir_button.changeColor(MOUSE_POS)
         salir_button.update(ventana)
@@ -251,6 +255,7 @@ def juego(nombres_jugadores):
     reloj=pygame.time.Clock()
     while True:
         if num_jugadores<=1:
+            mixer.music.stop()
             victoria(jugadores[0])
         present=pygame.time.get_ticks()
         delta=present-past
