@@ -116,7 +116,7 @@ def jugar():
 
         pygame.display.update()
 
-    radio = 50
+'''    radio = 50
     if (num==2):
         separacion=800
     elif(num==3):
@@ -136,12 +136,51 @@ def jugar():
         nomb = nombre[0]  # Obtener el nombre del primer jugador
         text = get_font(20).render(nombre[i], True, "white")
         rect = text.get_rect(center=(x, y-60))  # Obtener el rectángulo de la superficie de texto
-        ventana.blit(text, rect)  # Dibujar la superficie de texto sobre la ventana
+        ventana.blit(text, rect)  # Dibujar la superficie de texto sobre la ventana'''
+
+
+def victoria(jugador):
+    pygame.init()
+    ventana = pygame.display.set_mode((1280, 720))
+    pygame.display.set_caption("Juego terminado")
+    while True:
+        
+        text = get_font(36).render("El jugador "+jugador.getNombre(), True, "white")
+        rect = text.get_rect(center=(640, 100))
+        ventana.blit(text, rect)
+
+        jugador.posx=600
+        jugador.posy=300 
+        jugador.crearJugador()
+
+        text = get_font(36).render("ha sido reclutado al ejercito chino", True, "white")
+        rect = text.get_rect(center=(640, 500))
+        ventana.blit(text, rect)
+        #ventana.fill((0,0,0))
+        
+        MOUSE_POS = pygame.mouse.get_pos() 
+        
+        salir_button = Button(image=None, pos=(400, 600), text_input="SALIR", font=get_font(40), base_color="white", hovering_color="red")
+
+        salir_button.changeColor(MOUSE_POS)
+        salir_button.update(ventana)
+
+        for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if salir_button.checkForInput(MOUSE_POS):
+                        pygame.quit()
+                        sys.exit()
+        pygame.display.update()
 
 
 def juego(nombres_jugadores):
     jugadores_eliminados=[]
     num_jugadores = len(nombres_jugadores)
+
+    
 
     if (num_jugadores==2):
         jugador1=Jugador(nombres_jugadores[0],True,True,200,300)#+800
@@ -160,7 +199,6 @@ def juego(nombres_jugadores):
         for i in range(len(jugadores)):
             jugadores[i].crearJugador()
         
-
     elif(num_jugadores==4):
         jugador1=Jugador(nombres_jugadores[0],True,True,200,300)#+300
         jugador2=Jugador(nombres_jugadores[1],True,False,500,300)
@@ -182,7 +220,6 @@ def juego(nombres_jugadores):
         for i in range(len(jugadores)):
             jugadores[i].crearJugador()
 
-
     elif(num_jugadores==6):
         jugador1=Jugador(nombres_jugadores[0],True,True,200,300)#+170
         jugador2=Jugador(nombres_jugadores[1],True,False,370,300)
@@ -196,20 +233,12 @@ def juego(nombres_jugadores):
 
     estado=True
     pygame.init()
-    print
     ventana = pygame.display.set_mode((1280, 720))
     pygame.display.set_caption("Juego")
 
-    # Starting the mixer
     mixer.init()
-    
-    # Loading the song
     mixer.music.load("Sounds/cancion.mp3")
-    
-    # Setting the volume
     mixer.music.set_volume(0.2)
-    
-    # Start playing the song
     mixer.music.play()
 
     pausa_button = Button(image=None, pos=(1000, 600), text_input="PAUSAR", font=get_font(40), base_color="white", hovering_color="green")
@@ -221,6 +250,8 @@ def juego(nombres_jugadores):
     jug=0
     reloj=pygame.time.Clock()
     while True:
+        if num_jugadores<=1:
+            victoria(jugadores[0])
         present=pygame.time.get_ticks()
         delta=present-past
         past=present
@@ -279,7 +310,6 @@ def juego(nombres_jugadores):
                         for i in jugadores:
                             if (i.getBola()):
                                 mixer.music.load("Sounds/Gun_sound.mpeg")
-                                #pygame.time.wait(1000)
                                 
                                 mixer.music.set_volume(0.2)
                                 mixer.music.play()
@@ -288,7 +318,6 @@ def juego(nombres_jugadores):
                                 nombres_jugadores.pop(j)
                                 jugadores.pop(j)
                                 num_jugadores-=1
-                                #Tk().wm_withdraw() #to hide the main window
                                 messagebox.showinfo('Jugador Eliminado','El jugador '+jugador_eliminado+' ha sido ejecutado')
                             j+=1
                         #juego(nombres_jugadores) #para volver a crear a los jugadores
