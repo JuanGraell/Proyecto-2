@@ -29,15 +29,29 @@ class Jugador:
         self.posy=posy
         #self.imagen=imagen
 
+    def setBola(self,bola):
+        self.bola=bola
+    def getBola(self):
+        return self.bola
+    def getNombre(self):
+        return self.nombre
+
     def crearJugador(self):
 
         radio = 50
-        pygame.draw.circle(ventana, "white", (self.posx, self.posy), radio)
+        if (self.bola):
+            pygame.draw.circle(ventana, "green", (self.posx, self.posy), radio)
+            text = get_font(20).render(self.nombre, True, "green")
+            rect = text.get_rect(center=(self.posx, self.posy-60))
+            ventana.blit(text, rect)
+        else:
+            pygame.draw.circle(ventana, "white", (self.posx, self.posy), radio)
+            text = get_font(20).render(self.nombre, True, "white")
+            rect = text.get_rect(center=(self.posx, self.posy-60))
+            ventana.blit(text, rect)
         #font = get_font(18)  # Obtener la fuente
         #nomb = nombre[0]  # Obtener el nombre del primer jugador
-        text = get_font(20).render(self.nombre, True, "white")
-        rect = text.get_rect(center=(self.posx, self.posy-60))  # Obtener el rectángulo de la superficie de texto
-        ventana.blit(text, rect)  # Dibujar la superficie de texto sobre la ventana
+        
     
     
 
@@ -100,7 +114,6 @@ def jugar():
 
         pygame.display.update()
 
-def crearJugadores(num,nombre):
     radio = 50
     if (num==2):
         separacion=800
@@ -122,11 +135,7 @@ def crearJugadores(num,nombre):
         text = get_font(20).render(nombre[i], True, "white")
         rect = text.get_rect(center=(x, y-60))  # Obtener el rectángulo de la superficie de texto
         ventana.blit(text, rect)  # Dibujar la superficie de texto sobre la ventana
-def pausar():
-    pass
 
-def continuar():
-    pass
 
 def juego(nombres_jugadores):
     num_jugadores = len(nombres_jugadores)
@@ -135,17 +144,18 @@ def juego(nombres_jugadores):
         jugador1=Jugador(nombres_jugadores[0],True,True,200,300)#+800
         jugador2=Jugador(nombres_jugadores[1],True,False,1000,300)
 
-        jugador1.crearJugador()
-        jugador2.crearJugador()
+        jugadores=[jugador1,jugador2]
+        for i in range(len(jugadores)):
+            jugadores[i].crearJugador()
 
     if(num_jugadores==3):
         jugador1=Jugador(nombres_jugadores[0],True,True,200,300)#+450
         jugador2=Jugador(nombres_jugadores[1],True,False,650,300)
         jugador3=Jugador(nombres_jugadores[2],True,False,1100,300)
 
-        jugador1.crearJugador()
-        jugador2.crearJugador()
-        jugador3.crearJugador()
+        jugadores=[jugador1,jugador2,jugador3]
+        for i in range(len(jugadores)):
+            jugadores[i].crearJugador()
         
 
     elif(num_jugadores==4):
@@ -154,10 +164,9 @@ def juego(nombres_jugadores):
         jugador3=Jugador(nombres_jugadores[2],True,False,800,300)
         jugador4=Jugador(nombres_jugadores[3],True,False,1100,300)
 
-        jugador1.crearJugador()
-        jugador2.crearJugador()
-        jugador3.crearJugador()
-        jugador4.crearJugador()
+        jugadores=[jugador1,jugador2,jugador3,jugador4]
+        for i in range(len(jugadores)):
+            jugadores[i].crearJugador()
 
     elif(num_jugadores==5):
         jugador1=Jugador(nombres_jugadores[0],True,True,200,300)#+225
@@ -166,11 +175,9 @@ def juego(nombres_jugadores):
         jugador4=Jugador(nombres_jugadores[3],True,False,875,300)
         jugador5=Jugador(nombres_jugadores[4],True,False,1100,300)
 
-        jugador1.crearJugador()
-        jugador2.crearJugador()
-        jugador3.crearJugador()
-        jugador4.crearJugador()
-        jugador5.crearJugador()
+        jugadores=[jugador1,jugador2,jugador3,jugador4,jugador5]
+        for i in range(len(jugadores)):
+            jugadores[i].crearJugador()
 
 
     elif(num_jugadores==6):
@@ -181,15 +188,12 @@ def juego(nombres_jugadores):
         jugador5=Jugador(nombres_jugadores[4],True,False,880,300)
         jugador6=Jugador(nombres_jugadores[5],True,False,1100,300)#1050
 
-        jugador1.crearJugador()
-        jugador2.crearJugador()
-        jugador3.crearJugador()
-        jugador4.crearJugador()
-        jugador5.crearJugador()
-        jugador6.crearJugador()
+        jugadores=[jugador1,jugador2,jugador3,jugador4,jugador5,jugador6]
+        
 
     estado=True
     pygame.init()
+    print
     ventana = pygame.display.set_mode((1280, 720))
     pygame.display.set_caption("Juego")
 
@@ -208,18 +212,36 @@ def juego(nombres_jugadores):
     pausa_button = Button(image=None, pos=(1000, 600), text_input="PAUSAR", font=get_font(40), base_color="white", hovering_color="green")
     
     pausa_button.update(ventana)
-
+    
+    past=pygame.time.get_ticks()
+    accumulated=0
+    jug=0
+    reloj=pygame.time.Clock()
     while True:
+        present=pygame.time.get_ticks()
+        delta=present-past
+        past=present
+        accumulated+=delta
+        if(accumulated>=1500):
+            accumulated=0
+            if(jug>=num_jugadores):
+                jug=0
+            jugadores[jug-1].setBola(False)
+            jugadores[jug].setBola(True)
+            jug+=1
+        
+
+
         # Crear el título con la fuente
         text = get_font(36).render(f"Jugadores: {num_jugadores}", True, "white")
         rect = text.get_rect(center=(640, 50))
+        ventana.fill((0,0,0))
         ventana.blit(text, rect)
 
         MOUSE_POS = pygame.mouse.get_pos()
 
-
-        # Dibujar los círculos de los jugadores
-        crearJugadores(num_jugadores,nombres_jugadores)
+        for i in range(len(jugadores)):
+            jugadores[i].crearJugador()
 
 
         # Crear el botón de salir
@@ -242,19 +264,60 @@ def juego(nombres_jugadores):
 
                 if pausa_button.checkForInput(MOUSE_POS):
                     if (estado):
-                        mixer.music.pause()
+                        past=0
+                        present=0
+                        delta=0
+                        accumulated=0
+                        mixer.music.stop()
                         estado=False
-                        #pausa_button = Button(image=None, pos=(1000, 600), text_input="REANUDAR", font=get_font(40), base_color="white", hovering_color="green")
-                        
-                    else:
-                        mixer.music.unpause()
-                        estado=True
-                        #pausa_button = Button(image=None, pos=(1000, 600), text_input="PAUSAR", font=get_font(40), base_color="white", hovering_color="green")
-                        
-                    
-                    
+                        pausa_button = Button(image=None, pos=(1000, 600), text_input="REANUDAR", font=get_font(40), base_color="white", hovering_color="green")
+                        ventana.fill((0,0,0))
+                        j=0
+                        for i in jugadores:
+                            if (i.getBola()):
+                                pygame.time.wait(500)
+                                mixer.music.load("Sounds/Gun_sound.mpeg")
+                                mixer.music.set_volume(0.2)
+                                mixer.music.play()
+                                jugador_eliminado=i.getNombre()
+                                jugadores.pop(j)
+                            j+=1
+                        height=1280
+                        widht=720
 
+                        ventana_temp = pygame.display.set_mode((height,widht))
+                        ventana_temp.blit(BG, (0, 0))
+
+                        MOUSE_POS = pygame.mouse.get_pos()
+
+                        TEXT = get_font(80).render("El Jugador eliminado fue:", True, "#b68f40")
+                        RECT = TEXT.get_rect(center=(640, 100))
+                        TEXT = get_font(80).render(jugador_eliminado, True, "#b68f40")
+                        RECT = TEXT.get_rect(center=(640, 100))
+                        entendido = Button(image=None, pos=(640, 460), text_input="entendido", font=get_font(75), base_color="Black", hovering_color="Green")
+
+                        entendido.changeColor(MOUSE_POS)
+                        entendido.update(ventana_temp)
+                        ventana_temp.blit(TEXT, RECT)
+                        for event in pygame.event.get():
+                            if event.type == pygame.MOUSEBUTTONDOWN:
+                                if entendido.checkForInput(MOUSE_POS):
+                                    juego()
+
+
+                    else:
+                        estado=True
+                        pausa_button = Button(image=None, pos=(1000, 600), text_input="PAUSAR", font=get_font(40), base_color="white", hovering_color="green")
+                        ventana.fill((0,0,0))
+                        mixer.music.load("Sounds/cancion.mp3")
+                        mixer.music.set_volume(0.2)
+                        mixer.music.play()
+                    
+                    
+                    
+        
         pygame.display.update()
+        reloj.tick(60)
 
 def nombres(num_jugadores):
     # Crear una ventana
