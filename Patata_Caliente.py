@@ -251,7 +251,9 @@ def juego(nombres_jugadores):
     
     past=pygame.time.get_ticks()
     accumulated=0
+    loops=0
     jug=0
+    aleatorio_escogido=False
     reloj=pygame.time.Clock()
     while True:
         if num_jugadores<=1:
@@ -268,8 +270,40 @@ def juego(nombres_jugadores):
             jugadores[jug-1].setBola(False)
             jugadores[jug].setBola(True)
             jug+=1
+            loops+=1
         
-
+        
+        if (aleatorio_escogido):
+            if (loops>=aleatorio):
+                loops=0
+                past=0
+                present=0
+                delta=0
+                accumulated=0
+                mixer.music.stop()
+                estado=False
+                pausa_button = Button(image=None, pos=(1000, 600), text_input="REANUDAR", font=get_font(40), base_color="white", hovering_color="green")
+                ventana.fill((0,0,0))
+                j=0
+                ventana.fill((0,0,0))
+                ventana.blit(text, rect)
+                for i in range(len(jugadores)):
+                    jugadores[i].crearJugador()
+                pygame.display.update()
+                for i in jugadores:
+                    if (i.getBola()):
+                        mixer.music.load("Sounds/Gun_sound.mpeg")
+                        
+                        mixer.music.set_volume(0.2)
+                        mixer.music.play()
+                        jugador_eliminado=i.getNombre()
+                        jugadores_eliminados.append(jugador_eliminado)
+                        nombres_jugadores.pop(j)
+                        jugadores.pop(j)
+                        num_jugadores-=1
+                        messagebox.showinfo('Jugador Eliminado','El jugador '+jugador_eliminado+' ha sido ejecutado')
+                    j+=1
+                    
 
         # Crear el título con la fuente
         text = get_font(36).render(f"Jugadores: {num_jugadores}", True, "white")
@@ -285,7 +319,10 @@ def juego(nombres_jugadores):
 
         # Crear el botón de salir
         salir_button = Button(image=None, pos=(240, 600), text_input="SALIR", font=get_font(40), base_color="white", hovering_color="red")
+        random_button = Button(image=None, pos=(650, 600), text_input="RANDOM", font=get_font(40), base_color="white", hovering_color="red")
 
+        random_button.changeColor(MOUSE_POS)
+        random_button.update(ventana)
         salir_button.changeColor(MOUSE_POS)
         salir_button.update(ventana)
         pausa_button.changeColor(MOUSE_POS)
@@ -328,6 +365,7 @@ def juego(nombres_jugadores):
                         #juego(nombres_jugadores) #para volver a crear a los jugadores
 
                     else:
+                        aleatorio_escogido=False
                         past=0
                         present=0
                         delta=0
@@ -338,6 +376,12 @@ def juego(nombres_jugadores):
                         mixer.music.load("Sounds/cancion.mp3")
                         mixer.music.set_volume(0.2)
                         mixer.music.play()
+                if random_button.checkForInput(MOUSE_POS):
+                    loops=0
+                    aleatorio_escogido=True
+                    aleatorio=random.randrange(2,20)
+                    print(aleatorio)
+                    messagebox.showinfo('Tiempo Aleatorio','se ha escogido un numero aleatorio')
                     
                     
                     
