@@ -12,9 +12,11 @@ from pygame import mixer
 
 pygame.init()
 
+# Las medidas de la ventana del juego.
 height=1280
 widht=720
 
+# Crea la ventana del juego con las medidas.
 ventana = pygame.display.set_mode((height,widht))
 
 # Fondo y Caption
@@ -60,6 +62,7 @@ class Jugador:
 def get_font(size):
     return pygame.font.Font("assets/font.ttf", size)
 
+# Funcion del boton de jugar
 def jugar():
 
     num_jugadores = 2 # número inicial de jugadores
@@ -436,7 +439,8 @@ def nombres(num_jugadores):
 
     # Mostrar la ventana
     ventana.mainloop()
-    
+
+# Funcion de boton de instrucciones
 def instrucciones():
     while True:
         MOUSE_POS = pygame.mouse.get_pos()
@@ -462,6 +466,8 @@ def instrucciones():
 
         pygame.display.update()
 
+
+#Funcion de menu principal (El que muestra al ejecutarse.)
 def menu_principal():
     while True:
         ventana.blit(BG, (0, 0))
@@ -470,17 +476,19 @@ def menu_principal():
 
         TEXT = get_font(80).render("MENU PRINCIPAL", True, "#b68f40")
         RECT = TEXT.get_rect(center=(640, 100))
-
+        
         JUGAR_BUTTON = Button(image=pygame.image.load("assets/Play Rect.png"), pos=(640, 250), text_input="JUGAR", font=get_font(64), base_color="#d7fcd4", hovering_color="White")
         INSTRUCCIONES_BUTTON = Button(image=pygame.image.load("assets/Options Rect.png"), pos=(640, 400), text_input="INSTRUCCIONES", font=get_font(41), base_color="#d7fcd4", hovering_color="White")
         SALIR_BUTTON = Button(image=pygame.image.load("assets/Quit Rect.png"), pos=(640, 550), text_input="SALIR", font=get_font(60), base_color="#d7fcd4", hovering_color="White")
 
         ventana.blit(TEXT, RECT)
 
+        # Ciclo for para cambiar el color de los botones al pasar el cursor por encima.
         for button in [JUGAR_BUTTON, INSTRUCCIONES_BUTTON, SALIR_BUTTON]:
             button.changeColor(MOUSE_POS)
             button.update(ventana)
         
+        # ciclo for para los eventos.
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
