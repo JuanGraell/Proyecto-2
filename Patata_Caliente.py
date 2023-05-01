@@ -4,25 +4,10 @@ from classQueue import Queue
 from button import Button
 import sys
 import math
-#from tkinter import *
 from tkinter import messagebox
 import tkinter as tk
 from tkinter.font import Font
 from pygame import mixer
-
-pygame.init()
-
-#"""Las medidas de la ventana del juego."""
-height=1280
-widht=720
-
-#"""Crea la ventana del juego con las medidas."""
-ventana = pygame.display.set_mode((height,widht))
-
-#""" Fondo y Caption"""
-BG = pygame.image.load("assets/Background.png")
-pygame.display.set_caption("Papa Caliente")
-
 class Jugador:
     """Trae los metodos y atibutos de cada jugador"""
     def __init__(self,nombre,estado,bola,posx,posy):
@@ -41,7 +26,7 @@ class Jugador:
     def getNombre(self):
         return self.nombre
 
-    def crearJugador(self):
+    def crearJugador(self,ventana):
 
         radio = 50
         if (self.bola):
@@ -56,17 +41,12 @@ class Jugador:
             ventana.blit(text, rect)
         #font = get_font(18)  # Obtener la fuente
         #nomb = nombre[0]  # Obtener el nombre del primer jugador
-        
-    
-    
-
 
 def get_font(size):
     """# Devuelve la fuente del tamaño que se desee"""
     return pygame.font.Font("assets/font.ttf", size)
 
-
-def jugar():
+def jugar(ventana,BG):
     """# Funcion del boton de jugar"""
     """# número inicial de jugadores"""
     num_jugadores = 2
@@ -119,34 +99,11 @@ def jugar():
                     pygame.quit()
                     sys.exit()
                 if continuar_button.checkForInput(MOUSE_POS):
-                    nombres(num_jugadores)
+                    nombres(num_jugadores,ventana,BG)
 
         pygame.display.update()
 
-'''    radio = 50
-    if (num==2):
-        separacion=800
-    elif(num==3):
-        separacion=450
-    elif(num==4):
-        separacion=300
-    elif(num==5):
-        separacion=225
-    elif(num==6):
-        separacion = 170
-    x_ini = 200
-    y = 300
-    for i in range(num):
-        x = x_ini + i*separacion
-        pygame.draw.circle(ventana, "white", (x, y), radio)
-        font = get_font(18)  # Obtener la fuente
-        nomb = nombre[0]  # Obtener el nombre del primer jugador
-        text = get_font(20).render(nombre[i], True, "white")
-        rect = text.get_rect(center=(x, y-60))  # Obtener el rectángulo de la superficie de texto
-        ventana.blit(text, rect)  # Dibujar la superficie de texto sobre la ventana'''
-
-
-def victoria(jugador):
+def victoria(jugador,ventana,BG):
     """Muestra el jugador que obtuvo la victoria"""
     mixer.init()
     mixer.music.load("Sounds/victory.mpeg")
@@ -161,9 +118,9 @@ def victoria(jugador):
         rect = text.get_rect(center=(640, 100))
         ventana.blit(text, rect)
 
-        jugador.posx=600
+        jugador.posx=650
         jugador.posy=300 
-        jugador.crearJugador()
+        jugador.crearJugador(ventana)
 
         text = get_font(36).render("ha sido reclutado al ejercito chino", True, "white")
         rect = text.get_rect(center=(640, 500))
@@ -172,7 +129,12 @@ def victoria(jugador):
         
         MOUSE_POS = pygame.mouse.get_pos() 
         
-        salir_button = Button(image=None, pos=(640, 600), text_input="SALIR", font=get_font(40), base_color="white", hovering_color="red")
+        salir_button = Button(image=None, pos=(325, 600), text_input="SALIR", font=get_font(40), base_color="white", hovering_color="red")
+
+        regresar_button= Button(image=None, pos=(875, 600), text_input="REGRESAR", font=get_font(40), base_color="white", hovering_color="red")
+
+        regresar_button.changeColor(MOUSE_POS)
+        regresar_button.update(ventana)
 
         salir_button.changeColor(MOUSE_POS)
         salir_button.update(ventana)
@@ -185,10 +147,12 @@ def victoria(jugador):
                     if salir_button.checkForInput(MOUSE_POS):
                         pygame.quit()
                         sys.exit()
+                    if regresar_button.checkForInput(MOUSE_POS):
+                        mixer.music.stop()
+                        menu_principal(ventana,BG)
         pygame.display.update()
 
-
-def juego(nombres_jugadores):
+def juego(nombres_jugadores,ventana,BG):
     """En esta funcion se manejan los estados del juego y jugadores"""
     jugadores_eliminados=[]
     num_jugadores = len(nombres_jugadores)
@@ -200,8 +164,8 @@ def juego(nombres_jugadores):
         jugador2=Jugador(nombres_jugadores[1],True,False,1000,300)
 
         jugadores=[jugador1,jugador2]
-        for i in range(len(jugadores)):
-            jugadores[i].crearJugador()
+        '''for i in range(len(jugadores)):
+            jugadores[i].crearJugador(ventana)'''
 
     if(num_jugadores==3):
         jugador1=Jugador(nombres_jugadores[0],True,True,200,300)#+450
@@ -209,8 +173,8 @@ def juego(nombres_jugadores):
         jugador3=Jugador(nombres_jugadores[2],True,False,1100,300)
 
         jugadores=[jugador1,jugador2,jugador3]
-        for i in range(len(jugadores)):
-            jugadores[i].crearJugador()
+        '''for i in range(len(jugadores)):
+            jugadores[i].crearJugador(ventana)'''
         
     elif(num_jugadores==4):
         jugador1=Jugador(nombres_jugadores[0],True,True,200,300)#+300
@@ -219,8 +183,8 @@ def juego(nombres_jugadores):
         jugador4=Jugador(nombres_jugadores[3],True,False,1100,300)
 
         jugadores=[jugador1,jugador2,jugador3,jugador4]
-        for i in range(len(jugadores)):
-            jugadores[i].crearJugador()
+        '''for i in range(len(jugadores)):
+            jugadores[i].crearJugador(ventana)'''
 
     elif(num_jugadores==5):
         jugador1=Jugador(nombres_jugadores[0],True,True,200,300)#+225
@@ -230,8 +194,8 @@ def juego(nombres_jugadores):
         jugador5=Jugador(nombres_jugadores[4],True,False,1100,300)
 
         jugadores=[jugador1,jugador2,jugador3,jugador4,jugador5]
-        for i in range(len(jugadores)):
-            jugadores[i].crearJugador()
+        '''for i in range(len(jugadores)):
+            jugadores[i].crearJugador(ventana)'''
 
     elif(num_jugadores==6):
         jugador1=Jugador(nombres_jugadores[0],True,True,200,300)#+170
@@ -239,7 +203,7 @@ def juego(nombres_jugadores):
         jugador3=Jugador(nombres_jugadores[2],True,False,540,300)
         jugador4=Jugador(nombres_jugadores[3],True,False,710,300)
         jugador5=Jugador(nombres_jugadores[4],True,False,880,300)
-        jugador6=Jugador(nombres_jugadores[5],True,False,1100,300)#1050
+        jugador6=Jugador(nombres_jugadores[5],True,False,1050,300)#1050
 
         jugadores=[jugador1,jugador2,jugador3,jugador4,jugador5,jugador6]
         
@@ -267,7 +231,7 @@ def juego(nombres_jugadores):
     while True:
         if num_jugadores<=1:
             mixer.music.stop()
-            victoria(jugadores[0])
+            victoria(jugadores[0],ventana,BG)
         present=pygame.time.get_ticks()
         delta=present-past
         past=present
@@ -297,7 +261,7 @@ def juego(nombres_jugadores):
                 ventana.fill((0,0,0))
                 ventana.blit(text, rect)
                 for i in range(len(jugadores)):
-                    jugadores[i].crearJugador()
+                    jugadores[i].crearJugador(ventana)
                 pygame.display.update()
                 for i in jugadores:
                     if (i.getBola()):
@@ -323,7 +287,7 @@ def juego(nombres_jugadores):
         MOUSE_POS = pygame.mouse.get_pos()
 
         for i in range(len(jugadores)):
-            jugadores[i].crearJugador()
+            jugadores[i].crearJugador(ventana)
 
 
         # Crear el botón de salir
@@ -398,7 +362,7 @@ def juego(nombres_jugadores):
         pygame.display.update()
         reloj.tick(60)
 
-def nombres(num_jugadores):
+def nombres(num_jugadores,ventana,BG):
     """Crear una ventana"""
     """Establecer el tamaño de la ventana como el tamaño de la pantalla"""
     ventana = tk.Tk()
@@ -437,7 +401,7 @@ def nombres(num_jugadores):
                 return
         nombres_jugadores = [nombre.get() for nombre in nombres]
         ventana.destroy()
-        juego(nombres_jugadores)
+        juego(nombres_jugadores,ventana,BG)
 
 
         # Añadir un botón para guardar los nombres de los jugadores
@@ -447,8 +411,7 @@ def nombres(num_jugadores):
     # Mostrar la ventana
     ventana.mainloop()
 
-
-def instrucciones():
+def instrucciones(ventana,BG):
     """# Funcion de boton de instrucciones"""
     while True:
         MOUSE_POS = pygame.mouse.get_pos()
@@ -470,14 +433,12 @@ def instrucciones():
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if ATRAS.checkForInput(MOUSE_POS):
-                    menu_principal()
+                    menu_principal(ventana,BG)
 
         pygame.display.update()
 
-
-
-def menu_principal():
-    """#Funcion de menu principal (El que muestra al ejecutarse.)"""
+def menu_principal(ventana,BG):
+    
     while True:
         ventana.blit(BG, (0, 0))
 
@@ -504,19 +465,26 @@ def menu_principal():
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if JUGAR_BUTTON.checkForInput(MOUSE_POS):
-                    jugar()
+                    jugar(ventana,BG)
                 if INSTRUCCIONES_BUTTON.checkForInput(MOUSE_POS):
-                    instrucciones()
+                    instrucciones(ventana,BG)
                 if SALIR_BUTTON.checkForInput(MOUSE_POS):
                     pygame.quit()
                     sys.exit()
 
         pygame.display.update()
 
-menu_principal()
+'''pygame.init()
 
+#"""Las medidas de la ventana del juego."""
+height=1280
+widht=720
 
-'''
-jugadores = ["Bill", "David", "Susan", "Jane", "Kent", "Brad"]
-print(patataCaliente(jugadores), "ganó")
-'''
+#"""Crea la ventana del juego con las medidas."""
+ventana = pygame.display.set_mode((height,widht))
+
+#""" Fondo y Caption"""
+BG = pygame.image.load("assets/Background.png")
+pygame.display.set_caption("Papa Caliente")
+
+menu_principal()'''
