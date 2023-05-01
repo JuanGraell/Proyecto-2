@@ -27,6 +27,7 @@ class Jugador:
         return self.nombre
 
     def crearJugador(self,ventana):
+        """Crea el objeto jugador en la pantalla, la bola y el nombre"""
 
         radio = 50
         if (self.bola):
@@ -47,8 +48,8 @@ def get_font(size):
     return pygame.font.Font("assets/font.ttf", size)
 
 def jugar(ventana,BG):
-    """# Funcion del boton de jugar"""
-    """# número inicial de jugadores"""
+    """# Funcion del boton de jugar, número inicial de jugadores"""
+
     num_jugadores = 2
     while True:
         MOUSE_POS = pygame.mouse.get_pos()
@@ -363,8 +364,8 @@ def juego(nombres_jugadores,ventana,BG):
         reloj.tick(60)
 
 def nombres(num_jugadores,ventana,BG):
-    """Crear una ventana"""
-    """Establecer el tamaño de la ventana como el tamaño de la pantalla"""
+    """Crear una ventana, Establecer el tamaño de la ventana como el tamaño de la pantalla"""
+
     ventana = tk.Tk()
 
     
@@ -438,7 +439,7 @@ def instrucciones(ventana,BG):
         pygame.display.update()
 
 def menu_principal(ventana,BG):
-    
+    """Crea el menu pirncipal del"""
     while True:
         ventana.blit(BG, (0, 0))
 
@@ -474,17 +475,3 @@ def menu_principal(ventana,BG):
 
         pygame.display.update()
 
-'''pygame.init()
-
-#"""Las medidas de la ventana del juego."""
-height=1280
-widht=720
-
-#"""Crea la ventana del juego con las medidas."""
-ventana = pygame.display.set_mode((height,widht))
-
-#""" Fondo y Caption"""
-BG = pygame.image.load("assets/Background.png")
-pygame.display.set_caption("Papa Caliente")
-
-menu_principal()'''
