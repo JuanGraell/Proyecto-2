@@ -12,19 +12,21 @@ from pygame import mixer
 
 pygame.init()
 
-# Las medidas de la ventana del juego.
+"""Las medidas de la ventana del juego."""
 height=1280
 widht=720
 
-# Crea la ventana del juego con las medidas.
+"""Crea la ventana del juego con las medidas."""
 ventana = pygame.display.set_mode((height,widht))
 
-# Fondo y Caption
+""" Fondo y Caption"""
 BG = pygame.image.load("assets/Background.png")
 pygame.display.set_caption("Papa Caliente")
 
 class Jugador:
+    """Trae los metodos y atibutos de cada jugador"""
     def __init__(self,nombre,estado,bola,posx,posy):
+        
         self.nombre=nombre
         self.estado=estado
         self.bola=bola
@@ -58,14 +60,16 @@ class Jugador:
     
     
 
-# Devuelve la fuente del tamaño que se desee
+
 def get_font(size):
+    """# Devuelve la fuente del tamaño que se desee"""
     return pygame.font.Font("assets/font.ttf", size)
 
-# Funcion del boton de jugar
-def jugar():
 
-    num_jugadores = 2 # número inicial de jugadores
+def jugar():
+    """# Funcion del boton de jugar"""
+    """# número inicial de jugadores"""
+    num_jugadores = 2
     while True:
         MOUSE_POS = pygame.mouse.get_pos()
 
@@ -143,6 +147,7 @@ def jugar():
 
 
 def victoria(jugador):
+    """Muestra el jugador que obtuvo la victoria"""
     mixer.init()
     mixer.music.load("Sounds/victory.mpeg")
     mixer.music.set_volume(0.2)
@@ -184,6 +189,7 @@ def victoria(jugador):
 
 
 def juego(nombres_jugadores):
+    """En esta funcion se manejan los estados del juego y jugadores"""
     jugadores_eliminados=[]
     num_jugadores = len(nombres_jugadores)
 
@@ -393,10 +399,11 @@ def juego(nombres_jugadores):
         reloj.tick(60)
 
 def nombres(num_jugadores):
-    # Crear una ventana
+    """Crear una ventana"""
+    """Establecer el tamaño de la ventana como el tamaño de la pantalla"""
     ventana = tk.Tk()
 
-    # Establecer el tamaño de la ventana como el tamaño de la pantalla
+    
     ventana.geometry("{0}x{1}+0+0".format(ventana.winfo_screenwidth(), ventana.winfo_screenheight()))
 
     # Configurar la fuente y los colores
@@ -440,8 +447,9 @@ def nombres(num_jugadores):
     # Mostrar la ventana
     ventana.mainloop()
 
-# Funcion de boton de instrucciones
+
 def instrucciones():
+    """# Funcion de boton de instrucciones"""
     while True:
         MOUSE_POS = pygame.mouse.get_pos()
 
@@ -467,8 +475,9 @@ def instrucciones():
         pygame.display.update()
 
 
-#Funcion de menu principal (El que muestra al ejecutarse.)
+
 def menu_principal():
+    """#Funcion de menu principal (El que muestra al ejecutarse.)"""
     while True:
         ventana.blit(BG, (0, 0))
 
