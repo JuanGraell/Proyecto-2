@@ -12,14 +12,14 @@ from pygame import mixer
 
 pygame.init()
 
-"""Las medidas de la ventana del juego."""
+#"""Las medidas de la ventana del juego."""
 height=1280
 widht=720
 
-"""Crea la ventana del juego con las medidas."""
+#"""Crea la ventana del juego con las medidas."""
 ventana = pygame.display.set_mode((height,widht))
 
-""" Fondo y Caption"""
+#""" Fondo y Caption"""
 BG = pygame.image.load("assets/Background.png")
 pygame.display.set_caption("Papa Caliente")
 
